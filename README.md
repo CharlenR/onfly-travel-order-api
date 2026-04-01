@@ -180,5 +180,4 @@ Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes
 Para dúvidas ou problemas:
 - Abra uma issue no GitHub
 - Consulte a documentação do Swagger em `/api/documentation`
-- Verifique os logs do container: `docker-compose logs app-dev`</content>
-<parameter name="filePath">/Users/charlenrodrigues/workfolder/onfly/README.md
+- Verifique os logs do container: `docker-compose logs app-dev`
