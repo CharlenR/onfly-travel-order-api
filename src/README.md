@@ -53,6 +53,55 @@ In order to ensure that the Laravel community is welcoming to all, please review
 
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
+## Test Users
+
+After running `make setup`, the following test users are available for API testing:
+
+| Email | Password | Role | Permissions |
+|-------|----------|------|-------------|
+| `user@onfly.com` | `password` | Regular User | Create travel orders, view own orders |
+| `admin@onfly.com` | `password` | Admin | All permissions (approve/cancel orders) |
+| `test@example.com` | `password` | Regular User | Create travel orders, view own orders |
+
+**Login Example:**
+```bash
+curl -X POST "http://localhost:8000/api/login" \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@onfly.com", "password": "password"}'
+```
+
+## API Documentation (Swagger/OpenAPI)
+
+The API is documented using OpenAPI 3.0 spec via L5-Swagger. Access the documentation at:
+- **URL**: http://localhost:8000/api/documentation
+- **JSON Spec**: http://localhost:8000/docs?api-docs.json
+
+### Endpoints
+
+- **POST /api/login** - User authentication
+- **POST /api/logout** - Revoke access token
+- **GET /api/travel-orders** - List user's travel orders
+- **POST /api/travel-orders** - Create travel order
+- **GET /api/travel-orders/{id}** - Get specific travel order
+- **PATCH /api/travel-orders/{id}/approve** - Approve travel order (admin only)
+- **PATCH /api/travel-orders/{id}/cancel** - Cancel travel order (admin only)
+
+### Maintaining Swagger Documentation
+
+The OpenAPI specification is stored in `storage/api-docs/api-docs.json`. To update documentation:
+
+1. Edit the JSON file to reflect any API changes
+2. Update request/response schemas in the components section
+3. Add/remove paths as needed
+
+**Note**: The specification is served **statically** (not auto-generated) due to compatibility issues with swagger-php 3.5.1. The library encounters parsing errors when processing OpenAPI annotations (`@OA\PathItem() not found`), making automatic generation unreliable. This approach ensures:
+- Consistent and reliable documentation
+- No build-time failures
+- Full control over the API spec
+- Better performance (no runtime parsing)
+
+If you need to regenerate from annotations in the future, consider upgrading to a newer version of the swagger-php library or using a different documentation tool.
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
