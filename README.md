@@ -140,7 +140,7 @@ make logs
 make down
 
 # Limpar volumes (reset banco)
-make prune
+make reset
 ```
 
 ## Estrutura do Projeto
