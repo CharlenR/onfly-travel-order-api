@@ -34,7 +34,14 @@ class UpdateTravelOrderStatusRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'status.Illuminate\Validation\Rules\Enum' => 'O status fornecido é inválido. Use: approved ou canceled.',
+            'status.required' => 'Status is required.',
+            'status.string' => 'Status must be a string.',
+            'status.Illuminate\Validation\Rules\Enum' => 'The provided status is invalid. Use: approved or canceled.',
         ];
+    }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        throw new \Illuminate\Validation\ValidationException($validator);
     }
 }
