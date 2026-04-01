@@ -121,7 +121,7 @@ Todas as rotas abaixo requerem autenticação via Bearer Token:
 5. Faça uma requisição para a API
 
 ## Comandos Úteis
-Todos os comando foram baseados em Makefile, uma padronização que costumo seguir, princpalmente para aplicações em linguagens distintas.
+Todos os comandos foram baseados em Makefile, uma padronização que costumo seguir, princpalmente para aplicações em linguagens distintas que possam ser usada pelo mesmo time ou contexto.
 
 ```bash
 # Construir e iniciar serviços
