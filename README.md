@@ -45,7 +45,7 @@ Este projeto foi desenvolvido seguindo as melhores práticas do ecossistema Lara
 ## Configuração do Ambiente
 
 1. **Variáveis de Ambiente:**
-   O arquivo `.env` já está configurado para desenvolvimento local. Principais configurações:
+   O arquivo `.env.example`, que deve ser renomeado para `.env` já está configurado para desenvolvimento local. Principais configurações:
    - `APP_ENV=local`
    - `DB_CONNECTION=mysql`
    - `DB_HOST=db`
@@ -121,6 +121,7 @@ Todas as rotas abaixo requerem autenticação via Bearer Token:
 5. Faça uma requisição para a API
 
 ## Comandos Úteis
+Todos os comando foram baseados em Makefile, uma padronização que costumo seguir, princpalmente para aplicações em linguagens distintas.
 
 ```bash
 # Construir e iniciar serviços
@@ -130,16 +131,16 @@ make setup
 make test
 
 # Acessar container da aplicação
-docker-compose exec app-dev bash
+make exec
 
 # Ver logs
-docker-compose logs -f app-dev
+make logs
 
 # Parar serviços
-docker-compose down
+make down
 
 # Limpar volumes (reset banco)
-docker-compose down -v
+make prune
 ```
 
 ## Estrutura do Projeto
