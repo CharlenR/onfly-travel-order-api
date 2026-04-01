@@ -81,7 +81,6 @@ class Handler extends ExceptionHandler
             ], 404);
         }
 
-        // 🧠 Domínio (suas regras de negócio)
         if ($exception instanceof TravelOrderException) {
             Log::warning($exception->getMessage(), [
                 'type' => get_class($exception),

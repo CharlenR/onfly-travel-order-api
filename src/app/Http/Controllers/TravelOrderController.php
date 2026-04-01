@@ -10,14 +10,10 @@ use Illuminate\Support\Facades\Gate;
 
 class TravelOrderController extends Controller
 {
-    /**
-     * Display a listing of the TravelOrder.
-     */
     public function index(Request $request)
     {
-        $query = $request->user()->travelOrders(); // Garante que o usuário só veja os DELE
+        $query = $request->user()->travelOrders();
 
-        // Filtros dinâmicos (Padrão Sênior: usando when)
         $query->when($request->status, fn($q) => $q->where('status', $request->status))
             ->when($request->destination, fn($q) => $q->where('destination', 'like', "%{$request->destination}%"))
             ->when($request->start_date, fn($q) => $q->whereDate('departure_date', '>=', $request->start_date))
@@ -26,9 +22,6 @@ class TravelOrderController extends Controller
         return TravelOrderResource::collection($query->get());
     }
 
-    /**
-     * Store a newly created TravelOrder in storage.
-     */
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -42,22 +35,15 @@ class TravelOrderController extends Controller
         return new TravelOrderResource($order);
     }
 
-    /**
-     * Display the TravelOrder resource.
-     */
     public function show(TravelOrder $travelOrder)
     {
-        Gate::authorize('view', $travelOrder);  // Se não for o dono, o Laravel lança 403 automaticamente
+        Gate::authorize('view', $travelOrder);
 
         return new TravelOrderResource($travelOrder);
     }
 
-    /**
-     * Approve the specified TravelOrder in storage.
-     */
     public function approve(TravelOrder $travelOrder)
     {
-
         Gate::authorize('approve', $travelOrder);
 
         $travelOrder->approve();
@@ -71,12 +57,9 @@ class TravelOrderController extends Controller
             'data' => new TravelOrderResource($travelOrder)
         ]);
     }
-    /**
-     * Cancel the specified TravelOrder in storage.
-     */
+
     public function cancel(TravelOrder $travelOrder)
     {
-
         Gate::authorize('cancel', $travelOrder);
 
         $travelOrder->cancel();

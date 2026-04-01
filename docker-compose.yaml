@@ -4,12 +4,11 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - ./src:/var/www/html/src # O código (para o Nginx ler CSS/JS/Imagens)
-      - ./.docker/nginx/conf.d/app.conf:/etc/nginx/conf.d/default.conf # A sua config
+      - ./src:/var/www/html/src
+      - ./.docker/nginx/conf.d/app.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - app-dev
 
-  # Ambiente para Codar (Hot-reload, mapeamento de volume)
   app-dev:
     build:
       context: .
@@ -25,7 +24,6 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"      
 
-  # Ambiente de Testes (Roda e morre)
   app-test:
     build:
       context: .
@@ -38,7 +36,6 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  # Mock do Build de Produção (Para validar o CI localmente)
   app-prod:
     build:
       context: .
@@ -47,7 +44,6 @@ services:
       - APP_ENV=production
       - APP_DEBUG=false
 
-  # Banco de Desenvolvimento (Dados persistem no volume)
   db:
     image: mysql:8.4
     restart: always
@@ -65,7 +61,6 @@ services:
       - "3306:3306"
       
 
-  # Banco de Testes (Isolado para PHPUnit/Pest)
   db-test:
     image: mysql:8.4
     environment:

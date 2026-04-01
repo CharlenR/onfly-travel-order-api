@@ -24,7 +24,6 @@ class AuthController extends Controller
             ]);
         }
 
-        // Gera o token do Sanctum
         $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
@@ -40,7 +39,6 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        // Revoga o token que está sendo usado na requisição atual
         $request->user()->currentAccessToken()->delete();
 
         return response()->json(['message' => 'Logout successful']);

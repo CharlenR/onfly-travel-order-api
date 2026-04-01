@@ -11,18 +11,15 @@ class OrderStatusChanged extends Notification
 {
     use Queueable;
 
-    // O "public" aqui é obrigatório para o $this->order funcionar nos outros métodos
     public function __construct(public TravelOrder $order)
     {
-        //
     }
 
     public function via($notifiable): array
     {
-        return ['database']; // Canal de log para o teste rápido
+        return ['database'];
     }
 
-    // Se usar o canal 'database', o Laravel procura o método toArray:
     public function toArray($notifiable): array
     {
         return [
