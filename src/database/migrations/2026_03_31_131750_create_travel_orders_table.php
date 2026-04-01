@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('destination');
             $table->date('departure_date')->index();
             $table->date('return_date');
-            // Usamos string para status para facilitar leitura, mas validamos no Model/Enum
             $table->string('status')->default('requested')->index();
             $table->timestamps();
         });

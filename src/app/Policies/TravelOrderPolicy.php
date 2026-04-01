@@ -28,11 +28,11 @@ class TravelOrderPolicy
 
     public function approve(User $user, TravelOrder $order): bool
     {
-        return false; // só admin via before
+        return false;
     }
 
     public function cancel(User $user, TravelOrder $order): bool
     {
-        return false; // só admin via before
+        return false;
     }
 }

@@ -6,5 +6,4 @@ use DomainException;
 
 abstract class TravelOrderException extends DomainException
 {
-    //
 }

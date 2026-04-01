@@ -15,9 +15,8 @@ class TravelOrderController extends Controller
      */
     public function index(Request $request)
     {
-        $query = $request->user()->travelOrders(); // Garante que o usuário só veja os DELE
+        $query = $request->user()->travelOrders();
 
-        // Filtros dinâmicos (Padrão Sênior: usando when)
         $query->when($request->status, fn($q) => $q->where('status', $request->status))
             ->when($request->destination, fn($q) => $q->where('destination', 'like', "%{$request->destination}%"))
             ->when($request->start_date, fn($q) => $q->whereDate('departure_date', '>=', $request->start_date))
@@ -47,7 +46,7 @@ class TravelOrderController extends Controller
      */
     public function show(TravelOrder $travelOrder)
     {
-        Gate::authorize('view', $travelOrder);  // Se não for o dono, o Laravel lança 403 automaticamente
+        Gate::authorize('view', $travelOrder);
 
         return new TravelOrderResource($travelOrder);
     }
@@ -57,7 +56,6 @@ class TravelOrderController extends Controller
      */
     public function approve(TravelOrder $travelOrder)
     {
-
         Gate::authorize('approve', $travelOrder);
 
         $travelOrder->approve();
@@ -76,7 +74,6 @@ class TravelOrderController extends Controller
      */
     public function cancel(TravelOrder $travelOrder)
     {
-
         Gate::authorize('cancel', $travelOrder);
 
         $travelOrder->cancel();
