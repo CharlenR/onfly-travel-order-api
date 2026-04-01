@@ -1,7 +1,7 @@
 # Input Validation and Security Implementation
 
 ## Overview
-Implementamos validações robustas em todas as rotas da API para proteção contra injeção de scripts (XSS), SQL injection, e garantir integridade dos dados.
+Foram implementadas validações robustas em todas as rotas da API para proteção contra injeção de scripts (XSS), SQL injection, e garantir integridade dos dados.
 
 ## Validações Implementadas
 
