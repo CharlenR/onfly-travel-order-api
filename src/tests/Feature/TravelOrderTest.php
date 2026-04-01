@@ -50,4 +50,19 @@ class TravelOrderTest extends TestCase
             'status' => TravelOrderStatus::APPROVED
         ]);
     }
+
+    public function test_authorization_errors_return_json_response(): void
+    {
+        $user = User::factory()->create(['is_admin' => false]);
+        $order = TravelOrder::factory()->create(['user_id' => $user->id, 'status' => 'requested']);
+
+        $response = $this->actingAs($user)
+            ->patchJson("/api/travel-orders/{$order->id}/approve");
+
+        $response->assertStatus(403)
+                 ->assertJsonStructure(['message'])
+                 ->assertJson([
+                     'message' => 'Access denied. You do not have permission to perform this action.'
+                 ]);
+    }
 }

@@ -53,7 +53,7 @@ class TravelOrderController extends Controller
         event(new TravelOrderApproved($travelOrder));
 
         return response()->json([
-            'message' => "Pedido aprovado com sucesso!",
+            'message' => "Travel order approved successfully!",
             'data' => new TravelOrderResource($travelOrder)
         ]);
     }
@@ -69,7 +69,7 @@ class TravelOrderController extends Controller
         event(new TravelOrderApproved($travelOrder));
 
         return response()->json([
-            'message' => "Pedido cancelado com sucesso!",
+            'message' => "Travel order cancelled successfully!",
             'data' => new TravelOrderResource($travelOrder)
         ]);
     }

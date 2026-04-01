@@ -7,7 +7,10 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use App\Domain\TravelOrder\Exceptions\TravelOrderException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 
 class Handler extends ExceptionHandler
@@ -21,15 +24,60 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception)
     {
-        if ($exception instanceof AuthorizationException) {
+        // Força resposta JSON para requisições de API
+        if ($this->isApiRequest($request)) {
+            return $this->handleApiException($request, $exception);
+        }
+
+        return parent::render($request, $exception);
+    }
+
+    private function isApiRequest($request): bool
+    {
+        // Se é rota de API
+        if ($request->is('api/*')) {
+            return true;
+        }
+
+        // Se pediu JSON explicitamente
+        if ($request->wantsJson()) {
+            return true;
+        }
+
+        // Se header Accept é JSON
+        if ($request->header('Accept') === 'application/json') {
+            return true;
+        }
+
+        // Se é rota /docs com api-docs.json
+        if ($request->path() === 'docs') {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function handleApiException($request, Throwable $exception)
+    {
+        // 🔒 Autorização (Gate / Policy) - Ambas as variações
+        if ($exception instanceof AuthorizationException || $exception instanceof AccessDeniedHttpException) {
             return response()->json([
-                'message' => 'Acesso negado'
+                'message' => 'Acesso negado. Você não tem permissão para realizar esta ação.'
             ], 403);
         }
 
+        // ✅ Validação
+        if ($exception instanceof ValidationException) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $exception->errors()
+            ], 422);
+        }
+
+        // Resource not found (404)
         if ($exception instanceof NotFoundHttpException) {
             return response()->json([
-                'message' => 'Recurso não encontrado'
+                'message' => 'Resource not found'
             ], 404);
         }
 
@@ -43,6 +91,14 @@ class Handler extends ExceptionHandler
             ], 422);
         }
 
+        // 🌐 HTTP Exceptions (401, 403, 500, etc)
+        if ($exception instanceof HttpException) {
+            return response()->json([
+                'message' => $exception->getMessage() ?: $this->getHttpMessage($exception->getStatusCode())
+            ], $exception->getStatusCode());
+        }
+
+        // 💥 Fallback (erro inesperado)
         Log::error($exception->getMessage(), [
             'trace' => $exception->getTraceAsString(),
         ]);
@@ -50,5 +106,21 @@ class Handler extends ExceptionHandler
         return response()->json([
             'message' => 'Erro interno do servidor'
         ], 500);
+    }
+
+    private function getHttpMessage(int $statusCode): string
+    {
+        $messages = [
+            400 => 'Bad request',
+            401 => 'Unauthorized',
+            403 => 'Forbidden',
+            404 => 'Not found',
+            405 => 'Method not allowed',
+            422 => 'Validation error',
+            429 => 'Too many requests',
+            500 => 'Internal server error',
+        ];
+
+        return $messages[$statusCode] ?? 'Server error';
     }
 }

@@ -23,7 +23,7 @@ class OrderStatusChanged extends Notification
     public function toArray($notifiable): array
     {
         return [
-            'message' => "O pedido #{$this->order->id} foi {$this->order->status->value}.",
+            'message' => "Travel order #{$this->order->id} has been {$this->order->status->value}.",
             'order_id' => $this->order->id
         ];
     }

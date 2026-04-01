@@ -53,6 +53,23 @@ In order to ensure that the Laravel community is welcoming to all, please review
 
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
+## Test Users
+
+After running `make setup`, the following test users are available for API testing:
+
+| Email | Password | Role | Permissions |
+|-------|----------|------|-------------|
+| `user@onfly.com` | `password` | Regular User | Create travel orders, view own orders |
+| `admin@onfly.com` | `password` | Admin | All permissions (approve/cancel orders) |
+| `test@example.com` | `password` | Regular User | Create travel orders, view own orders |
+
+**Login Example:**
+```bash
+curl -X POST "http://localhost:8000/api/login" \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@onfly.com", "password": "password"}'
+```
+
 ## API Documentation (Swagger/OpenAPI)
 
 The API is documented using OpenAPI 3.0 spec via L5-Swagger. Access the documentation at:
