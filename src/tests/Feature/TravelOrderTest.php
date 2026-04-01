@@ -75,7 +75,7 @@ class TravelOrderTest extends TestCase
         $response->assertStatus(403)
                  ->assertJsonStructure(['message'])
                  ->assertJson([
-                     'message' => 'Acesso negado. Você não tem permissão para realizar esta ação.'
+                     'message' => 'Access denied. You do not have permission to perform this action.'
                  ]);
     }
 }

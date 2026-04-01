@@ -18,34 +18,34 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, $request) {
             if ($request->is('api/*') || $request->wantsJson()) {
                 return response()->json([
-                    'message' => 'Recurso não encontrado'
+                    'message' => 'Resource not found'
                 ], 404);
             }
         });
 
-        // Tratar erro 403 (Policy/Gate negado / AccessDenied)
+        // Handle 403 error (Policy/Gate denied / AccessDenied)
         $exceptions->render(function (\Illuminate\Auth\Access\AuthorizationException $e, $request) {
             if ($request->is('api/*') || $request->wantsJson()) {
                 return response()->json([
-                    'message' => 'Acesso negado. Você não tem permissão para realizar esta ação.'
+                    'message' => 'Access denied. You do not have permission to perform this action.'
                 ], 403);
             }
         });
 
-        // Tratar AccessDeniedHttpException (convertida pelo Laravel de AuthorizationException)
+        // Handle AccessDeniedHttpException (converted by Laravel from AuthorizationException)
         $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException $e, $request) {
             if ($request->is('api/*') || $request->wantsJson()) {
                 return response()->json([
-                    'message' => 'Acesso negado. Você não tem permissão para realizar esta ação.'
+                    'message' => 'Access denied. You do not have permission to perform this action.'
                 ], 403);
             }
         });
 
-        // Tratar erros de validação
+        // Handle validation errors
         $exceptions->render(function (\Illuminate\Validation\ValidationException $e, $request) {
             if ($request->is('api/*') || $request->wantsJson()) {
                 return response()->json([
-                    'message' => 'Erro de validação',
+                    'message' => 'Validation error',
                     'errors' => $e->errors()
                 ], 422);
             }

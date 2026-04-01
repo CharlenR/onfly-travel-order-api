@@ -69,15 +69,15 @@ class Handler extends ExceptionHandler
         // ✅ Validação
         if ($exception instanceof ValidationException) {
             return response()->json([
-                'message' => 'Erro de validação',
+                'message' => 'Validation error',
                 'errors' => $exception->errors()
             ], 422);
         }
 
-        // 📦 Recurso não encontrado (404)
+        // Resource not found (404)
         if ($exception instanceof NotFoundHttpException) {
             return response()->json([
-                'message' => 'Recurso não encontrado'
+                'message' => 'Resource not found'
             ], 404);
         }
 
@@ -112,16 +112,16 @@ class Handler extends ExceptionHandler
     private function getHttpMessage(int $statusCode): string
     {
         $messages = [
-            400 => 'Requisição inválida',
-            401 => 'Não autenticado',
-            403 => 'Acesso negado',
-            404 => 'Não encontrado',
-            405 => 'Método não permitido',
-            422 => 'Erro de validação',
-            429 => 'Muitas requisições',
-            500 => 'Erro interno do servidor',
+            400 => 'Bad request',
+            401 => 'Unauthorized',
+            403 => 'Forbidden',
+            404 => 'Not found',
+            405 => 'Method not allowed',
+            422 => 'Validation error',
+            429 => 'Too many requests',
+            500 => 'Internal server error',
         ];
 
-        return $messages[$statusCode] ?? 'Erro do servidor';
+        return $messages[$statusCode] ?? 'Server error';
     }
 }
