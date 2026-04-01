@@ -14,17 +14,14 @@ EXPOSE 9000
 # --- STAGE 2: DEV (Xdebug + Ferramentas de Dev) ---
 FROM base AS dev
 RUN pecl install xdebug && docker-php-ext-enable xdebug
-# Copie sua config de xdebug se tiver uma (ex: xdebug.mode=debug)
 COPY .docker/php/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 USER root
 
 # --- STAGE 3: TEST (Ambiente de CI/Testes) ---
 FROM base AS test
 ENV APP_ENV=testing
-# Copiamos o código para o container de teste para ele ser autossuficiente
 COPY ./src .
 RUN composer install --no-interaction
-# O comando padrão para este estágio
 CMD ["php", "artisan", "test"]
 
 # --- STAGE 4: PROD (Otimizado + Segurança) ---

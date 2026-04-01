@@ -21,21 +21,18 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception)
     {
-        // 🔒 Autorização (Gate / Policy)
         if ($exception instanceof AuthorizationException) {
             return response()->json([
                 'message' => 'Acesso negado'
             ], 403);
         }
 
-        // 📦 Recurso não encontrado
         if ($exception instanceof NotFoundHttpException) {
             return response()->json([
                 'message' => 'Recurso não encontrado'
             ], 404);
         }
 
-        // 🧠 Domínio (suas regras de negócio)
         if ($exception instanceof TravelOrderException) {
             Log::warning($exception->getMessage(), [
                 'type' => get_class($exception),
@@ -46,7 +43,6 @@ class Handler extends ExceptionHandler
             ], 422);
         }
 
-        // 💥 Fallback (erro inesperado)
         Log::error($exception->getMessage(), [
             'trace' => $exception->getTraceAsString(),
         ]);
