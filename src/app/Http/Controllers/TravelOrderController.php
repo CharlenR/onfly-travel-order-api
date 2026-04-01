@@ -12,6 +12,13 @@ class TravelOrderController extends Controller
 {
     public function index(Request $request)
     {
+        $request->validate([
+            'status' => 'nullable|string|max:50|in:requested,approved,canceled',
+            'destination' => 'nullable|string|max:255',
+            'start_date' => 'nullable|date_format:Y-m-d',
+            'end_date' => 'nullable|date_format:Y-m-d|after_or_equal:start_date',
+        ]);
+
         $query = $request->user()->travelOrders();
 
         $query->when($request->status, fn($q) => $q->where('status', $request->status))
@@ -25,10 +32,10 @@ class TravelOrderController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'requester_name' => 'required|string',
-            'destination' => 'required|string',
-            'departure_date' => 'required|date|after_or_equal:today',
-            'return_date' => 'required|date|after:departure_date',
+            'requester_name' => 'required|string|max:255|min:2',
+            'destination' => 'required|string|max:255|min:2',
+            'departure_date' => 'required|date_format:Y-m-d|after_or_equal:today|before_or_equal:+5 years',
+            'return_date' => 'required|date_format:Y-m-d|after:departure_date|before_or_equal:+5 years',
         ]);
 
         $order = $request->user()->travelOrders()->create($data);
