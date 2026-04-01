@@ -62,6 +62,3 @@ test-verbose:
 # ----------------
 
 setup: build up migrate seed
-
-prune:
-	${DC} down -v
