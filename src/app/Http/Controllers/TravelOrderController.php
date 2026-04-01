@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\Gate;
 
 class TravelOrderController extends Controller
 {
-    /**
-     * Display a listing of the TravelOrder.
-     */
     public function index(Request $request)
     {
         $query = $request->user()->travelOrders();
@@ -25,9 +22,6 @@ class TravelOrderController extends Controller
         return TravelOrderResource::collection($query->get());
     }
 
-    /**
-     * Store a newly created TravelOrder in storage.
-     */
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -41,9 +35,6 @@ class TravelOrderController extends Controller
         return new TravelOrderResource($order);
     }
 
-    /**
-     * Display the TravelOrder resource.
-     */
     public function show(TravelOrder $travelOrder)
     {
         Gate::authorize('view', $travelOrder);
@@ -51,9 +42,6 @@ class TravelOrderController extends Controller
         return new TravelOrderResource($travelOrder);
     }
 
-    /**
-     * Approve the specified TravelOrder in storage.
-     */
     public function approve(TravelOrder $travelOrder)
     {
         Gate::authorize('approve', $travelOrder);
@@ -69,9 +57,7 @@ class TravelOrderController extends Controller
             'data' => new TravelOrderResource($travelOrder)
         ]);
     }
-    /**
-     * Cancel the specified TravelOrder in storage.
-     */
+
     public function cancel(TravelOrder $travelOrder)
     {
         Gate::authorize('cancel', $travelOrder);
